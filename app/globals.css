@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .center {
+    @apply flex items-center justify-center text-center;
+  }
+  .d-center {
+    @apply block mx-auto;
+  }
+  .heading {
+    @apply text-primary text-4xl 2xl:text-[45px] leading-[50px] 2xl:leading-[68px];
+  }
+  .btnFilled {
+    @apply border border-primary bg-primary text-white px-2 md:px-4 py-0.5 md:py-2  rounded md:rounded-xl hover:bg-primary/95 transition-all;
+  }
+  .btnOutlined {
+    @apply text-primary px-2 md:px-4 py-0.5 md:py-2  rounded md:rounded-xl border border-primary hover:bg-primary hover:border-primary hover:text-white transition-all;
+  }
+  .btnNoDesign {
+    @apply text-white/80 px-2 md:px-4 py-0.5 md:py-2 hover:text-white  transition-all;
+  }
+}
+
+body {
+  @apply bg-grey text-black overflow-x-hidden;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  background: #e5e5e5cd;
+  box-shadow: inset 0 0 3px #cccccc;
+  border-radius: 4px;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #bdbdbddd;
+  border-radius: 5px;
+  cursor: grabbing;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #bdbdbd;
+}
