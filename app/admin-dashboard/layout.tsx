@@ -1,4 +1,4 @@
-import NavbarUser from "@/components/dashboard/NavbarUser";
+import NavbarDashboard from "@/components/admin-dashboard/NavbarDashboard";
 
 const DashboardLayout = ({
   children,
@@ -7,8 +7,8 @@ const DashboardLayout = ({
 }>) => {
   return (
     <>
-      <NavbarUser />
-      <section className="max-h-[calc(100dvh-72px)] overflow-x-hidden overflow-y-auto">
+      <NavbarDashboard />
+      <section className="bg-[#FAFAFA] max-h-[calc(100dvh-64px)] overflow-hidden">
         {children}
       </section>
     </>
