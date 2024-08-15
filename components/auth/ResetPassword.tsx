@@ -6,6 +6,14 @@ import AppButton from "../ui/AppButton";
 import Link from "next/link";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { TbNumber123 } from "react-icons/tb";
+import { toast } from "react-toastify";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { useRouter } from "next/navigation";
+import {
+  useResendEmailMutation,
+  useVerifyUserMutation,
+} from "@/redux/features/auth/authApi";
 
 interface FormData {
   code: string;
@@ -18,8 +26,34 @@ const ResetPassword = () => {
     formState: { errors },
   } = useForm<FormData>();
 
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const [verifyUser, { isLoading }] = useVerifyUserMutation();
+  const [resendEmail, { isLoading: resendLoading }] = useResendEmailMutation();
+  const user = useAppSelector(selectCurrentUser);
+
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    console.log(data);
+    await verifyUser({ token: data.code, email: user?.email })
+      .unwrap()
+      .then((res) => {
+        toast.success(res?.message);
+        // dispatch(setUser({ user: { email: data.email } }));
+      })
+      .catch((res) => {
+        toast.error(res?.message);
+      });
+  };
+
+  const handleResend = async () => {
+    await resendEmail(user?.email)
+      .unwrap()
+      .then((res) => {
+        toast.success(res?.message);
+        // dispatch(setUser({ user: { email: data.email } }));
+      })
+      .catch((res) => {
+        toast.error(res?.message);
+      });
   };
   return (
     <form
@@ -37,11 +71,20 @@ const ResetPassword = () => {
         error={errors.code}
       />
 
-      <AppButton type="submit" className="w-full py-3" label="Continue" />
+      <AppButton
+        disabled={isLoading}
+        type="submit"
+        className="w-full py-3"
+        label="Continue"
+      />
 
       <p className="text-center">
         Don&apos;t receive code?{" "}
-        <button type="button" className="text-primary font-medium">
+        <button
+          onClick={handleResend}
+          type="button"
+          className="text-primary font-medium"
+        >
           Click to resend
         </button>
       </p>

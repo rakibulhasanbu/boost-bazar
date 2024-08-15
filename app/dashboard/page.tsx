@@ -21,14 +21,6 @@ const page = () => {
       title: "Instagram",
     },
     {
-      image: "/image/service3.png",
-      title: "Linkedin",
-    },
-    {
-      image: "/image/service4.png",
-      title: "X",
-    },
-    {
       image: "/image/service5.png",
       title: "Telegram",
     },
@@ -37,40 +29,49 @@ const page = () => {
       title: "Youtube",
     },
     {
+      image: "/image/service4.png",
+      title: "X",
+    },
+    {
       image: "/image/service7.png",
       title: "Tiktok",
     },
+    {
+      image: "/image/service3.png",
+      title: "Linkedin",
+    },
+
     {
       image: "/image/service8.png",
       title: "Shopify",
     },
     {
-      image: "/image/service1.png",
-      title: "Facebook",
+      image: "/image/service9.png",
+      title: "Snapchat",
     },
     {
-      image: "/image/service2.png",
-      title: "Instagram",
+      image: "/image/service10.png",
+      title: "Google",
     },
     {
-      image: "/image/service3.png",
-      title: "Linkedin",
+      image: "/image/service11.png",
+      title: "Website",
     },
     {
-      image: "/image/service4.png",
-      title: "X",
+      image: "/image/service12.png",
+      title: "Likee",
     },
     {
-      image: "/image/service5.png",
-      title: "Telegram",
+      image: "/image/service13.png",
+      title: "Twitch",
     },
     {
-      image: "/image/service6.png",
-      title: "Youtube",
+      image: "/image/service14.png",
+      title: "Reviews",
     },
     {
-      image: "/image/service7.png",
-      title: "Tiktok",
+      image: "/image/service15.png",
+      title: "Others",
     },
   ];
 
@@ -79,11 +80,11 @@ const page = () => {
       <Marquee
         speed={40}
         direction="right"
-        className="w-fit bg-primary/5 my-16 py-3 text-sm"
+        className="w-fit bg-primary/5 my-10 md:my-16 py-3 text-sm"
         autoFill={true}
       >
-        {marqueTexts.map((text) => (
-          <p key={text} className=" flex items-center gap-1 pl-12">
+        {marqueTexts.map((text, i) => (
+          <p key={text + i} className=" flex items-center gap-1 pl-12">
             <GoDotFill />
             {text}
           </p>
@@ -91,7 +92,7 @@ const page = () => {
       </Marquee>
 
       <div className="container">
-        <div className="grid grid-cols-2 gap-20">
+        <div className="grid md:grid-cols-2 gap-5 md:gap-20">
           <div className="border border-primary/50 bg-primary/10 p-5 space-y-5 rounded-lg">
             <div className="flex items-center justify-between">
               <h3 className="text-dark-grey">Main balance</h3>
@@ -120,7 +121,7 @@ const page = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-5 gap-2 md:gap-10 pt-20">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-2 md:gap-10 pt-10 md:pt-20">
           {servicesData.map((service, i) => (
             <div
               key={i}

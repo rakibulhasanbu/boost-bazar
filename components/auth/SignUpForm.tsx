@@ -7,6 +7,12 @@ import { FiMail } from "react-icons/fi";
 import { MdOutlineLock } from "react-icons/md";
 import AppButton from "../ui/AppButton";
 import Link from "next/link";
+import { useSignupUserMutation } from "@/redux/features/auth/authApi";
+import { toast } from "react-toastify";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { setUser, useCurrentToken } from "@/redux/features/auth/authSlice";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 interface FormData {
   name: string;
@@ -21,9 +27,34 @@ const SignUpForm = () => {
     formState: { errors },
   } = useForm<FormData>();
 
+  const token = useAppSelector(useCurrentToken);
+
+  const router = useRouter();
+
+  const [userSingUp, { isLoading }] = useSignupUserMutation();
+
+  const dispatch = useAppDispatch();
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    console.log(data);
+    await userSingUp(data)
+      .unwrap()
+      .then((res) => {
+        toast.success(res?.message);
+        dispatch(
+          setUser({ user: res.data.user, accessToken: res.data.accessToken })
+        );
+        router.push("/");
+      })
+      .catch((res) => {
+        toast.error(res?.message);
+      });
   };
+
+  useEffect(() => {
+    if (token) {
+      router.push("/");
+    }
+  }, []);
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -77,7 +108,12 @@ const SignUpForm = () => {
           </Link>
         </p>
       </div>
-      <AppButton type="submit" className="w-full py-3" label="Create account" />
+      <AppButton
+        disabled={isLoading}
+        type="submit"
+        className="w-full py-3"
+        label="Create account"
+      />
       <p className="text-center">
         Already have an account?{" "}
         <Link href={"/auth/sign-in"} className="text-primary font-medium">

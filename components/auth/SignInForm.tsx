@@ -7,6 +7,11 @@ import { FiMail } from "react-icons/fi";
 import { MdOutlineLock } from "react-icons/md";
 import AppButton from "../ui/AppButton";
 import Link from "next/link";
+import { useLoginMutation } from "@/redux/features/auth/authApi";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/redux/hook";
+import { setUser } from "@/redux/features/auth/authSlice";
 
 interface FormData {
   name: string;
@@ -21,9 +26,29 @@ const SignInForm = () => {
     formState: { errors },
   } = useForm<FormData>();
 
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const [signInUser, { isLoading }] = useLoginMutation();
+
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    console.log(data);
+    await signInUser(data)
+      .unwrap()
+      .then((res) => {
+        toast.success(res?.message);
+        dispatch(
+          setUser({ user: res.data.user, accessToken: res.data.accessToken })
+        );
+        if (res?.data?.user?.role === "admin") {
+          router.push("/admin-dashboard");
+        } else {
+          router.push("/dashboard");
+        }
+      })
+      .catch((res) => {
+        toast.error(res?.message);
+      });
   };
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -58,7 +83,12 @@ const SignInForm = () => {
         />
         <p className="text-dark-grey font-light">Keep me logged in</p>
       </div>
-      <AppButton type="submit" className="w-full py-3" label="Log in" />
+      <AppButton
+        disabled={isLoading}
+        type="submit"
+        className="w-full py-3"
+        label="Log in"
+      />
       <p className="text-center">
         Don&apos;t have an account?{" "}
         <Link href={"/auth/sign-up"} className="text-primary font-medium">
