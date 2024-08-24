@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { FaNairaSign } from "react-icons/fa6";
 import { IoIosArrowForward } from "react-icons/io";
-import ReactApexChart from "react-apexcharts";
 import {
   useGetAdminOverviewQuery,
   useGetCurrencyQuery,
@@ -15,6 +14,7 @@ import { formatDate } from "@/utils/formateDate";
 import { ApexOptions } from "apexcharts";
 import { useGetUsersQuery } from "@/redux/features/auth/authApi";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 
 enum EAccountCategory {
   YOUTUBE = "Youtube",
@@ -29,6 +29,10 @@ type TTrafic = {
 };
 
 const Page = () => {
+  const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+    ssr: false, // This ensures the component is only rendered on the client side
+  });
+
   const { data: transactions } = useGetCurrencyQuery("");
   const { data: adminOverview } = useGetAdminOverviewQuery("");
   const { data: usersData } = useGetUsersQuery("");
@@ -76,6 +80,7 @@ const Page = () => {
   const series = (adminOverview?.data?.trafic || []).map(
     (data: TTrafic) => data.count
   );
+
   const labels = (adminOverview?.data?.trafic || []).map(
     (data: TTrafic) => data.accountCategory
   );
