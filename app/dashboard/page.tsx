@@ -9,6 +9,7 @@ import AnimationWrapper from "@/components/ui/AnimationWrapper";
 import {
   useGetMainBalanceQuery,
   useGetServicesQuery,
+  useGetSpendHistoryQuery,
 } from "@/redux/features/dashboard/dashboardApi";
 import {
   setCategorizedService,
@@ -34,6 +35,7 @@ const Page = () => {
   ];
 
   const { data: balance } = useGetMainBalanceQuery("");
+  const { data: spendData } = useGetSpendHistoryQuery("");
 
   const { services } = useAppSelector((store) => store.service);
   const { data, isSuccess, refetch } = useGetServicesQuery("", {
@@ -81,7 +83,7 @@ const Page = () => {
             </div>
             <h1 className="text-2xl text-black/80 font-bold flex items-center gap-1">
               <FaNairaSign />
-              {balance?.amount || 0}
+              {balance?.data?.amount}
             </h1>
           </div>
 
@@ -98,7 +100,7 @@ const Page = () => {
             </div>
             <h1 className="text-2xl text-black/80 font-bold flex items-center gap-1">
               <FaNairaSign />
-              000,00.00
+              {spendData?.data?.spend}
             </h1>
           </div>
         </div>

@@ -45,9 +45,23 @@ const userDashboardApi = baseApi.injectEndpoints({
       }),
       // providesTags: [tagTypes.dashboard],
     }),
+    getCurrency: builder.query({
+      query: () => ({
+        url: `/currency-request`,
+        method: "GET",
+      }),
+      // providesTags: [tagTypes.dashboard],
+    }),
     getMainBalance: builder.query({
       query: () => ({
         url: `/currency/single-user-currency`,
+        method: "GET",
+      }),
+      // providesTags: [tagTypes.dashboard],
+    }),
+    getAdminOverview: builder.query({
+      query: () => ({
+        url: `/users/admin/overview`,
         method: "GET",
       }),
       // providesTags: [tagTypes.dashboard],
@@ -56,6 +70,13 @@ const userDashboardApi = baseApi.injectEndpoints({
     getDepositHistory: builder.query({
       query: (id) => ({
         url: `/currency?ownById=${id}`,
+        method: "GET",
+      }),
+      // providesTags: [tagTypes.dashboard],
+    }),
+    getSpendHistory: builder.query({
+      query: () => ({
+        url: `/users/info/spend`,
         method: "GET",
       }),
       // providesTags: [tagTypes.dashboard],
@@ -89,4 +110,7 @@ export const {
   useCurrencyRequestMutation,
   useGetMainBalanceQuery,
   useGetDepositHistoryQuery,
+  useGetCurrencyQuery,
+  useGetAdminOverviewQuery,
+  useGetSpendHistoryQuery,
 } = userDashboardApi;

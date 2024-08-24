@@ -6,6 +6,7 @@ import AppFormInput from "../ui/AppFormInput";
 import AppFormSelect from "../ui/AppFormSelect";
 import { useCurrencyRequestMutation } from "@/redux/features/dashboard/dashboardApi";
 import { toast } from "react-toastify";
+import { redirect, useRouter } from "next/navigation";
 
 interface FormData {
   amount: number;
@@ -20,9 +21,10 @@ const FundForm = () => {
     formState: { errors },
     reset,
   } = useForm<FormData>();
+  const router = useRouter();
   const [createCurrencyRequest, { isLoading }] = useCurrencyRequestMutation();
+
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    console.log(data);
     const submittedData = {
       data: { amount: data.amount },
       method: data.method,
@@ -31,7 +33,12 @@ const FundForm = () => {
     await createCurrencyRequest(submittedData)
       .unwrap()
       .then((res) => {
-        toast.success(res?.message);
+        // toast.success(res?.message);
+        if (res?.data?.url) {
+          router.replace(res?.data?.url);
+          // redirect(res.data.url);
+          // return { props: {} };
+        }
         reset();
       })
       .catch((res) => {

@@ -8,11 +8,11 @@ import { IoArrowBackOutline } from "react-icons/io5";
 import { TbNumber123 } from "react-icons/tb";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { selectCurrentUser, setOtp } from "@/redux/features/auth/authSlice";
 import { useRouter } from "next/navigation";
 import {
-  useResendEmailMutation,
-  useVerifyUserMutation,
+  useForgotPasswordMutation,
+  useVerifyForgotUserMutation,
 } from "@/redux/features/auth/authApi";
 
 interface FormData {
@@ -28,8 +28,9 @@ const ResetPassword = () => {
 
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const [verifyUser, { isLoading }] = useVerifyUserMutation();
-  const [resendEmail, { isLoading: resendLoading }] = useResendEmailMutation();
+  const [verifyUser, { isLoading }] = useVerifyForgotUserMutation();
+  const [resendEmail, { isLoading: resendLoading }] =
+    useForgotPasswordMutation();
   const user = useAppSelector(selectCurrentUser);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
@@ -37,7 +38,8 @@ const ResetPassword = () => {
       .unwrap()
       .then((res) => {
         toast.success(res?.message);
-        // dispatch(setUser({ user: { email: data.email } }));
+        dispatch(setOtp(data.code));
+        router.push("/auth/new-password");
       })
       .catch((res) => {
         toast.error(res?.data?.message);
